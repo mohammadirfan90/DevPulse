@@ -4,6 +4,7 @@ import { AppError } from "./utils/appError";
 import cors from "cors";
 import { authRoutes } from "./modules/auth/auth.route";
 import cookieParser from "cookie-parser";
+import { issuesRoutes } from "./modules/issues/issues.route";
 
 const app: Application = express();
 
@@ -18,6 +19,7 @@ app.use(cors(corsOptions));
 app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/issues", issuesRoutes);
 
 app.use(globalErrorHandler);
 

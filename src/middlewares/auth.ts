@@ -8,7 +8,7 @@ import { pool } from "../db";
 
 const auth = (...roles: ROLES[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    console.log("Auth middleware executed with roles:", roles);
+    // console.log("Auth middleware executed with roles:", roles);
 
     const token = req.headers.authorization;
     if (!token) {

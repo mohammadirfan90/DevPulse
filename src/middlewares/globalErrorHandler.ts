@@ -7,6 +7,7 @@ export const globalErrorHandler: ErrorRequestHandler = (
   res,
   next,
 ) => {
+  console.error("Error caught by global error handler:", err);
   let statusCode = 500;
   let message = "Internal Server Error";
   let errors: string = "Something went wrong";
@@ -14,6 +15,17 @@ export const globalErrorHandler: ErrorRequestHandler = (
   if (err instanceof AppError) {
     statusCode = err.statusCode;
     message = err.message;
+    errors = err.message;
+  }
+
+  else if (err.name === "JsonWebTokenError") {
+    statusCode = 401;
+    message = "Unauthorized: You are not allowed to access this resource";
+    errors = err.message;
+  }
+  else if (err.name === "TokenExpiredError") {
+    statusCode = 401;
+    message = "Unauthorized: Your session has expired";
     errors = err.message;
   }
 

@@ -20,9 +20,13 @@ export const initDb = async () => {
       DO $$
       BEGIN
         IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'issue_type') THEN
-          CREATE TYPE issue_type AS ENUM ('bug', 'feature', 'task');
+          CREATE TYPE issue_type AS ENUM ('bug', 'feature_request');
         END IF;
       END$$;
+    `);
+
+    await pool.query(`
+      ALTER TYPE issue_type ADD VALUE IF NOT EXISTS 'feature_request';
     `);
 
     await pool.query(`
