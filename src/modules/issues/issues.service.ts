@@ -72,7 +72,12 @@ const getAllIssuesFromDb = async (filters: {
   });
 };
 
+const getIssueByIdFromDb=async (id: string) => {
+  const result = await pool.query(`SELECT * FROM issues WHERE id = $1`, [id]);
+  return result.rows[0];
+};
 export const issuesService = {
   createIssueIntoDb,
   getAllIssuesFromDb,
+  getIssueByIdFromDb,
 };

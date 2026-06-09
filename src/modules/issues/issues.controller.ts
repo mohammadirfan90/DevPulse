@@ -4,10 +4,9 @@ import { issuesService } from "./issues.service";
 import type { Request, Response } from "express";
 
 const createIssue = catchAsync(async (req: Request, res: Response) => {
-  const { title, description, type  } = req.body;
+  const { title, description, type } = req.body;
 
   const user = req.user;
-  
 
   const result = await issuesService.createIssueIntoDb({
     title,
@@ -42,7 +41,18 @@ const getAllIssues = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getIssueById = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await issuesService.getIssueByIdFromDb(id as string);
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Issue retrieved successfully",
+    data: result,
+  });
+});
 export const issuesController = {
   createIssue,
   getAllIssues,
+  getIssueById,
 };

@@ -15,4 +15,8 @@ router.post(
 // GET /api/issues
 router.get("/", issuesController.getAllIssues);
 
+
+// GET /api/issues/:id
+router.get("/:id", issuesController.getIssueById);
+
 export const issuesRoutes = router;
