@@ -39,6 +39,10 @@ export const initDb = async () => {
     `);
 
     await pool.query(`
+      ALTER TYPE issue_status ADD VALUE IF NOT EXISTS 'resolved';
+    `);
+
+    await pool.query(`
       CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
         name VARCHAR(100) NOT NULL,

@@ -76,8 +76,77 @@ const getIssueByIdFromDb=async (id: string) => {
   const result = await pool.query(`SELECT * FROM issues WHERE id = $1`, [id]);
   return result.rows[0];
 };
+
+const getIssueWithReporterByIdFromDb = async (id: string) => {
+  const result = await pool.query(`SELECT * FROM issues WHERE id = $1`, [id]);
+  const issue = result.rows[0];
+  if (!issue) {
+    return null;
+  }
+
+  const userResult = await pool.query(
+    `SELECT id, name, role FROM users WHERE id = $1`,
+    [issue.reporter_id],
+  );
+  const reporter = userResult.rows[0] || null;
+
+  const { reporter_id, ...issueData } = issue;
+  return {
+    ...issueData,
+    reporter,
+  };
+};
+
+const updateIssueInDb = async (id: string, payload: Partial<IIssue>) => {
+  const fields: string[] = [];
+  const values: any[] = [];
+  let index = 1;
+
+  if (payload.title !== undefined) {
+    fields.push(`title = $${index++}`);
+    values.push(payload.title);
+  }
+  if (payload.description !== undefined) {
+    fields.push(`description = $${index++}`);
+    values.push(payload.description);
+  }
+  if (payload.type !== undefined) {
+    fields.push(`type = $${index++}`);
+    values.push(payload.type);
+  }
+  if (payload.status !== undefined) {
+    fields.push(`status = $${index++}`);
+    values.push(payload.status);
+  }
+
+  if (fields.length === 0) {
+    const result = await pool.query(`SELECT * FROM issues WHERE id = $1`, [id]);
+    return result.rows[0];
+  }
+
+  fields.push(`updated_at = CURRENT_TIMESTAMP`);
+
+  values.push(id);
+  const query = `
+    UPDATE issues
+    SET ${fields.join(", ")}
+    WHERE id = $${index}
+    RETURNING *
+  `;
+
+  const result = await pool.query(query, values);
+  return result.rows[0];
+};
+
+const deleteIssueFromDb = async (id: string) => {
+  await pool.query(`DELETE FROM issues WHERE id = $1`, [id]);
+};
+
 export const issuesService = {
   createIssueIntoDb,
   getAllIssuesFromDb,
   getIssueByIdFromDb,
+  getIssueWithReporterByIdFromDb,
+  updateIssueInDb,
+  deleteIssueFromDb,
 };
