@@ -3,8 +3,7 @@
 DevPulse is a collaborative platform for software development teams to report bugs, suggest features, and coordinate resolutions. It enforces role-based access control (RBAC), strict request validation, and clean database transactions using native PostgreSQL queries.
 
 - **GitHub Repository**: [mohammadirfan90/DevPulse](https://github.com/mohammadirfan90/DevPulse)
-- **Live Deployment**: [https://devpulse-api.onrender.com](https://devpulse-api.onrender.com) (or your deployment URL)
-
+- **Live Deployment**: [https://devpulse-api-yw2u.onrender.com](https://devpulse-api-yw2u.onrender.com)
 ---
 
 ## 🛠️ Technology Stack
